@@ -1,0 +1,21 @@
+[tool.poetry]
+name = "buberdinner"
+version = "0.1.0"
+description = "buber dinner in python inspired from https://www.youtube.com/watch?v=fhM0V2N1GpY"
+authors = ["Markus Iorio <mbalzert@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.12"
+fastapi = "^0.104.1"
+
+
+[tool.poetry.group.dev.dependencies]
+black = "^23.10.1"
+mypy = "^1.6.1"
+ruff = "^0.1.4"
+pytest = "^7.4.3"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
