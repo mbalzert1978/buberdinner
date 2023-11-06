@@ -5,6 +5,9 @@
     - [Register](#register)
       - [Register Request](#register-request)
       - [Register Response](#register-response)
+    - [Login](#login)
+      - [Login Request](#login-request)
+      - [Authenticate Response](#authenticate-response)
 
 ## Auth
 
@@ -33,9 +36,40 @@ POST {{host}}/auth/register
 
 ```json
 {
-  "id": "d89c2d0a-eb3e-4075-95ff-b920b55aa104",
+  "id": "00000000-0000-0000-0000-000000000000",
   "first_name": "John",
   "last_name": "Doe",
-  "email": "john.doe@email.com"
+  "email": "john.doe@email.com",
+  "token": "00000000-0000-0000-0000-000000000000"
+}
+```
+
+### Login
+
+```js
+POST {{host}}/auth/login
+```
+
+#### Login Request
+
+```json
+{
+    "email": "john.doe@email.com",
+    "password": "jd123"
+}
+```
+
+#### Authenticate Response
+```js
+200 OK
+```
+
+```json
+{
+  "id": "00000000-0000-0000-0000-000000000000",
+  "first_name": "John",
+  "last_name": "Doe",
+  "email": "john.doe@email.com",
+  "token": "00000000-0000-0000-0000-000000000000"
 }
 ```
