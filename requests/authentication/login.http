@@ -1,4 +1,4 @@
-@host=http://127.0.0.1:8000
+@host=http://127.0.0.1:8000/v1
 
 POST {{host}}/auth/login
 Content-Type: application/json
