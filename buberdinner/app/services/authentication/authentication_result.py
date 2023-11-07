@@ -3,7 +3,7 @@ import uuid
 import pydantic
 
 
-class AuthenticateResponse(pydantic.BaseModel):
+class AuthenticationResult(pydantic.BaseModel):
     id: uuid.UUID = pydantic.Field(default_factory=uuid.uuid4)
     first_name: str
     last_name: str
