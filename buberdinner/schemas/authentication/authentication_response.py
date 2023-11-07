@@ -5,7 +5,7 @@ import pydantic
 
 class AuthenticateResponse(pydantic.BaseModel):
     id: uuid.UUID
-    fistname: str
-    lastname: str
+    first_name: str
+    last_name: str
     email: str
     token: str
