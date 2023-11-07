@@ -1,17 +1,51 @@
 import fastapi
-import fastapi.encoders as encoders
 
+from buberdinner.app.services.authentication.auth_interface import (
+    AuthenticationInterface,
+)
+from buberdinner.app.services.authentication.authentication_service import (
+    get_authentication_service,
+)
+from buberdinner.schemas.authentication.authentication_response import (
+    AuthenticateResponse,
+)
 from buberdinner.schemas.authentication.loginrequest import LoginRequest
 from buberdinner.schemas.authentication.register_request import RegisterRequest
 
 auth = fastapi.APIRouter(prefix="/auth", tags=["auth"])
 
-@auth.post("/register")
-def register(request: RegisterRequest):
-    json = encoders.jsonable_encoder(request)
-    return fastapi.responses.JSONResponse(content=json)
 
-@auth.post("/login")
-def login(request: LoginRequest):
-    json = encoders.jsonable_encoder(request)
-    return fastapi.responses.JSONResponse(content=json)
+@auth.post("/register", response_model=AuthenticateResponse)
+def register(
+    request: RegisterRequest,
+    _auth_service: AuthenticationInterface = fastapi.Depends(
+        get_authentication_service
+    ),
+):
+    auth_result = _auth_service.register(
+        request.first_name, request.last_name, request.email, request.password
+    )
+    return AuthenticateResponse(
+        id=auth_result.id,
+        first_name=auth_result.first_name,
+        last_name=auth_result.last_name,
+        email=auth_result.email,
+        token=auth_result.token,
+    )
+
+
+@auth.post("/login", response_model=AuthenticateResponse)
+def login(
+    request: LoginRequest,
+    _auth_service: AuthenticationInterface = fastapi.Depends(
+        get_authentication_service
+    ),
+):
+    auth_result = _auth_service.login(request.email, request.password)
+    return AuthenticateResponse(
+        id=auth_result.id,
+        first_name=auth_result.first_name,
+        last_name=auth_result.last_name,
+        email=auth_result.email,
+        token=auth_result.token,
+    )
