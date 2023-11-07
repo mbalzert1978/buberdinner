@@ -7,7 +7,7 @@
       - [Register Response](#register-response)
     - [Login](#login)
       - [Login Request](#login-request)
-      - [Authenticate Response](#authenticate-response)
+      - [Login Response](#login-response)
 
 ## Auth
 
@@ -59,7 +59,7 @@ POST {{host}}/auth/login
 }
 ```
 
-#### Authenticate Response
+#### Login Response
 ```js
 200 OK
 ```
