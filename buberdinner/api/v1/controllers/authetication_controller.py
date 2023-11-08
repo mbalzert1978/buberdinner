@@ -1,10 +1,8 @@
 import fastapi
 
+from buberdinner.app import dependencies
 from buberdinner.app.services.authentication.auth_interface import (
     AuthenticationInterface,
-)
-from buberdinner.app.services.authentication.authentication_service import (
-    get_authentication_service,
 )
 from buberdinner.schemas.authentication.authentication_response import (
     AuthenticateResponse,
@@ -19,7 +17,7 @@ auth = fastapi.APIRouter(prefix="/auth", tags=["auth"])
 def register(
     request: RegisterRequest,
     _auth_service: AuthenticationInterface = fastapi.Depends(
-        get_authentication_service
+        dependencies.authentication_service
     ),
 ):
     auth_result = _auth_service.register(
@@ -38,7 +36,7 @@ def register(
 def login(
     request: LoginRequest,
     _auth_service: AuthenticationInterface = fastapi.Depends(
-        get_authentication_service
+        dependencies.authentication_service
     ),
 ):
     auth_result = _auth_service.login(request.email, request.password)

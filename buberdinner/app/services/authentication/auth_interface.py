@@ -1,6 +1,8 @@
 import typing
 
-from .authentication_result import AuthenticationResult
+from buberdinner.app.services.authentication.authentication_result import (
+    AuthenticationResult,
+)
 
 
 class AuthenticationInterface(typing.Protocol):

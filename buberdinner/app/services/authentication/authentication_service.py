@@ -1,5 +1,6 @@
-from .auth_interface import AuthenticationInterface
-from .authentication_result import AuthenticationResult
+from buberdinner.app.services.authentication.authentication_result import (
+    AuthenticationResult,
+)
 
 
 class AuthenticationService:
@@ -14,7 +15,3 @@ class AuthenticationService:
         return AuthenticationResult(
             first_name=first_name, last_name=last_name, email=email, token="token"
         )
-
-
-def get_authentication_service() -> AuthenticationInterface:
-    return AuthenticationService()
