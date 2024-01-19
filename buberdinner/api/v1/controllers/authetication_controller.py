@@ -3,9 +3,7 @@ import fastapi
 from buberdinner.app import dependencies
 from buberdinner.schemas.authentication.login import LoginRequest
 from buberdinner.schemas.authentication.register import RegisterRequest
-from buberdinner.schemas.authentication.response import (
-    AuthenticationResponse,
-)
+from buberdinner.schemas.authentication.response import AuthenticationResponse
 
 auth = fastapi.APIRouter(prefix="/auth", tags=["auth"])
 

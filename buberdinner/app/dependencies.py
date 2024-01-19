@@ -2,18 +2,12 @@ import typing
 
 import fastapi
 
-from buberdinner.app.common.interfaces.authentication.token_generator import (
-    ITokenGenerator,
-)
-from buberdinner.app.services.authentication.authentication import (
+from buberdinner.app.common.interfaces.authentication import ITokenGenerator
+from buberdinner.app.services.authentication import (
+    AuthenticationService,
     IAuthentication,
 )
-from buberdinner.app.services.authentication.authentication_service import (
-    AuthenticationService,
-)
-from buberdinner.infrastructure.authentication.jwt_token_generator import (
-    JwtTokenGenerator,
-)
+from buberdinner.infrastructure.authentication import JwtTokenGenerator
 
 
 def get_jwt() -> ITokenGenerator:

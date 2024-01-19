@@ -1,5 +1,3 @@
-from buberdinner.app.common.interfaces.authentication.token_generator import (
-    ITokenGenerator,
-)
+from buberdinner.app.common.interfaces.authentication.generator import ITokenGenerator
 
 __all__ = ["ITokenGenerator"]

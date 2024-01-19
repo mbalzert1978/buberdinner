@@ -7,7 +7,7 @@ from buberdinner.api.core.events import (
     create_start_app_handler,
     create_stop_app_handler,
 )
-from buberdinner.api.v1 import Authcontroller
+from buberdinner.api.v1.controllers import Authcontroller
 
 
 def get_application() -> FastAPI:
