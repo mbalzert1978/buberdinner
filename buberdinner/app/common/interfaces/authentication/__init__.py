@@ -1,5 +1,5 @@
-from buberdinner.app.common.interfaces.authentication.jwt_gen_interface import (
-    IJwtTokenGenerator,
+from buberdinner.app.common.interfaces.authentication.token_generator import (
+    ITokenGenerator,
 )
 
-__all__ = ["IJwtTokenGenerator"]
+__all__ = ["ITokenGenerator"]

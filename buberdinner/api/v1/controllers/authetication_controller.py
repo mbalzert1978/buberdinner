@@ -3,8 +3,8 @@ import typing
 import fastapi
 
 from buberdinner.app import dependencies
-from buberdinner.app.services.authentication.auth_interface import (
-    AuthenticationInterface,
+from buberdinner.app.services.authentication.authentication import (
+    IAuthentication,
 )
 from buberdinner.schemas.authentication.authentication_response import (
     AuthenticateResponse,
@@ -19,7 +19,7 @@ auth = fastapi.APIRouter(prefix="/auth", tags=["auth"])
 def register(
     request: RegisterRequest,
     auth_service: typing.Annotated[
-        AuthenticationInterface, fastapi.Depends(dependencies.authentication_service)
+        IAuthentication, fastapi.Depends(dependencies.authentication_service)
     ],
 ):
     auth_result = auth_service.register(
@@ -37,11 +37,11 @@ def register(
 @auth.post("/login", response_model=AuthenticateResponse)
 def login(
     request: LoginRequest,
-    _auth_service: typing.Annotated[
-        AuthenticationInterface, fastapi.Depends(dependencies.authentication_service)
+    auth_service: typing.Annotated[
+        IAuthentication, fastapi.Depends(dependencies.authentication_service)
     ],
 ):
-    auth_result = _auth_service.login(request.email, request.password)
+    auth_result = auth_service.login(request.email, request.password)
     return AuthenticateResponse(
         id=auth_result.id,
         first_name=auth_result.first_name,
