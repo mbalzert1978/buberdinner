@@ -5,7 +5,7 @@ from buberdinner.app.services.authentication.authentication_result import (
 )
 
 
-class AuthenticationInterface(typing.Protocol):
+class IAuthentication(typing.Protocol):
     def login(self, email: str, password: str) -> AuthenticationResult:
         """Log in to the system."""
 

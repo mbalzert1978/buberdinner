@@ -17,6 +17,7 @@ class AppSettings(BaseAppSettings):
     openapi_url: str = "/openapi.json"
     redoc_url: str = "/redoc"
     title: str = "FastAPI Buber Dinner API"
+    issuer: str = "buberdinner"
     version: str = "0.0.1"
 
     database_url: PostgresDsn
@@ -27,7 +28,7 @@ class AppSettings(BaseAppSettings):
 
     api_prefix: str = "/api"
 
-    jwt_token_prefix: str = "Token"
+    jwt_token_expires_in_days: int = 1
 
     allowed_hosts: list[str] = ["*"]
 

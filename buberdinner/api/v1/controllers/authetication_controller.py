@@ -1,29 +1,21 @@
 import fastapi
 
 from buberdinner.app import dependencies
-from buberdinner.app.services.authentication.auth_interface import (
-    AuthenticationInterface,
-)
-from buberdinner.schemas.authentication.authentication_response import (
-    AuthenticateResponse,
-)
-from buberdinner.schemas.authentication.login_request import LoginRequest
-from buberdinner.schemas.authentication.register_request import RegisterRequest
+from buberdinner.schemas.authentication.login import LoginRequest
+from buberdinner.schemas.authentication.register import RegisterRequest
+from buberdinner.schemas.authentication.response import AuthenticationResponse
 
 auth = fastapi.APIRouter(prefix="/auth", tags=["auth"])
 
 
-@auth.post("/register", response_model=AuthenticateResponse)
+@auth.post("/register", response_model=AuthenticationResponse)
 def register(
-    request: RegisterRequest,
-    _auth_service: AuthenticationInterface = fastapi.Depends(
-        dependencies.authentication_service
-    ),
-):
-    auth_result = _auth_service.register(
+    request: RegisterRequest, auth_service: dependencies.Authentication
+) -> AuthenticationResponse:
+    auth_result = auth_service.register(
         request.first_name, request.last_name, request.email, request.password
     )
-    return AuthenticateResponse(
+    return AuthenticationResponse(
         id=auth_result.id,
         first_name=auth_result.first_name,
         last_name=auth_result.last_name,
@@ -32,15 +24,12 @@ def register(
     )
 
 
-@auth.post("/login", response_model=AuthenticateResponse)
+@auth.post("/login", response_model=AuthenticationResponse)
 def login(
-    request: LoginRequest,
-    _auth_service: AuthenticationInterface = fastapi.Depends(
-        dependencies.authentication_service
-    ),
-):
-    auth_result = _auth_service.login(request.email, request.password)
-    return AuthenticateResponse(
+    request: LoginRequest, auth_service: dependencies.Authentication
+) -> AuthenticationResponse:
+    auth_result = auth_service.login(request.email, request.password)
+    return AuthenticationResponse(
         id=auth_result.id,
         first_name=auth_result.first_name,
         last_name=auth_result.last_name,
