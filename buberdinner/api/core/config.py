@@ -17,4 +17,4 @@ environments: dict[AppEnvTypes, type[AppSettings]] = {
 def get_app_settings() -> AppSettings:
     app_env = BaseAppSettings().app_env
     config = environments[app_env]
-    return config()
+    return config() # type: ignore
