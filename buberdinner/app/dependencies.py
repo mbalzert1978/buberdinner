@@ -1,10 +1,26 @@
-from buberdinner.app.services.authentication.authentication_service import (
-    AuthenticationService,
+import typing
+
+from fastapi import Depends
+
+from buberdinner.app.common.interfaces.authentication.jwt_gen_interface import (
+    IJwtTokenGenerator,
 )
 from buberdinner.app.services.authentication.auth_interface import (
     AuthenticationInterface,
 )
+from buberdinner.app.services.authentication.authentication_service import (
+    AuthenticationService,
+)
+from buberdinner.infrastructure.authentication.jwt_token_generator import (
+    JwtTokenGenerator,
+)
 
 
-def authentication_service() -> AuthenticationInterface:
-    return AuthenticationService()
+def get_jwt() -> IJwtTokenGenerator:
+    return JwtTokenGenerator()
+
+
+def authentication_service(
+    jwt_gen: typing.Annotated[IJwtTokenGenerator, Depends(get_jwt)]
+) -> AuthenticationInterface:
+    return AuthenticationService(jwt_gen=jwt_gen)
