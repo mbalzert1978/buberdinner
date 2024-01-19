@@ -3,7 +3,10 @@ from fastapi import FastAPI
 from starlette.middleware.cors import CORSMiddleware
 
 from buberdinner.api.core.config import get_app_settings
-from buberdinner.api.core.events import create_start_app_handler, create_stop_app_handler
+from buberdinner.api.core.events import (
+    create_start_app_handler,
+    create_stop_app_handler,
+)
 from buberdinner.api.v1 import Authcontroller
 
 

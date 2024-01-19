@@ -9,6 +9,7 @@ from buberdinner.app.services.authentication.authentication_result import (
 class AuthenticationService:
     def __init__(self, jwt_gen: IJwtTokenGenerator) -> None:
         self.jwt_gen = jwt_gen
+
     def login(self, email: str, password: str) -> AuthenticationResult:
         return AuthenticationResult(
             first_name="first_name", last_name="last_name", email=email, token="token"
@@ -19,7 +20,7 @@ class AuthenticationService:
     ) -> AuthenticationResult:
         # TODO: Check if user already exists
         # TODO: Create new user (generate unique ID)
-        token = self.jwt_gen.generate_token(uuid.uuid4(), first_name,last_name)
+        token = self.jwt_gen.generate_token(uuid.uuid4(), first_name, last_name)
         return AuthenticationResult(
             first_name=first_name, last_name=last_name, email=email, token=token
         )

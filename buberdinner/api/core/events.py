@@ -11,9 +11,11 @@ async def connect_to_db(app: FastAPI, settings: AppSettings) -> None:
     # todo connect to db
     return None
 
+
 async def close_db_connection(app: FastAPI) -> None:
     # todo close db connection
     return None
+
 
 def create_start_app_handler(
     app: FastAPI,
