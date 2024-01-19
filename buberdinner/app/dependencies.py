@@ -20,7 +20,13 @@ def get_jwt() -> ITokenGenerator:
     return JwtTokenGenerator()
 
 
-def authentication_service(
-    jwt_gen: typing.Annotated[ITokenGenerator, fastapi.Depends(get_jwt)]
-) -> IAuthentication:
+TokenGenerator = typing.Annotated[ITokenGenerator, fastapi.Depends(get_jwt)]
+
+
+def authentication_service(jwt_gen: TokenGenerator) -> IAuthentication:
     return AuthenticationService(jwt_generator=jwt_gen)
+
+
+Authentication = typing.Annotated[
+    IAuthentication, fastapi.Depends(authentication_service)
+]
