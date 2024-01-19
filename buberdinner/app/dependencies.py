@@ -1,6 +1,6 @@
 import typing
 
-from fastapi import Depends
+import fastapi
 
 from buberdinner.app.common.interfaces.authentication.jwt_gen_interface import (
     IJwtTokenGenerator,
@@ -21,6 +21,6 @@ def get_jwt() -> IJwtTokenGenerator:
 
 
 def authentication_service(
-    jwt_gen: typing.Annotated[IJwtTokenGenerator, Depends(get_jwt)]
+    jwt_gen: typing.Annotated[IJwtTokenGenerator, fastapi.Depends(get_jwt)]
 ) -> AuthenticationInterface:
     return AuthenticationService(jwt_gen=jwt_gen)
