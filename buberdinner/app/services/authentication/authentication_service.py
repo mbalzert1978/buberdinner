@@ -20,18 +20,14 @@ class AuthenticationService:
         self._user_repository = user_repository
 
     def login(self, email: str, password: str) -> AuthenticationResult:
-        # validate user exists
         if (user := self._user_repository.get_user_by_email(email)) is None:
             raise UserExistsError(f"User {email} does not exist.")
-
-        # validate password
         if user.password != password:
             raise ValueError("Invalid password")
-
-        # generate token
-        token = self._jwt_generator.generate_token(user=user)
-
-        return AuthenticationResult(user=user, token=token)
+        return AuthenticationResult(
+            user=user,
+            token=self._jwt_generator.generate_token(user=user),
+        )
 
     def register(
         self, first_name: str, last_name: str, email: str, password: str
@@ -39,7 +35,6 @@ class AuthenticationService:
         if self._user_repository.get_user_by_email(email) is not None:
             msg = f"User {email} allready exists."
             raise UserExistsError(msg)
-
         user = self._user_repository.add(
             User(
                 id=uuid.uuid4(),
@@ -49,5 +44,7 @@ class AuthenticationService:
                 password=password,
             )
         )
-        token = self._jwt_generator.generate_token(user=user)
-        return AuthenticationResult(user=user, token=token)
+        return AuthenticationResult(
+            user=user,
+            token=self._jwt_generator.generate_token(user=user),
+        )
