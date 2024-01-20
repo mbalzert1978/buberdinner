@@ -8,8 +8,14 @@ from buberdinner.app.services.authentication.authentication_result import (
 from buberdinner.domain.entities import User
 
 
-class UserExistsError(Exception):
-    """Exception raised when a user already exists"""
+class AuthenticationServiceError(Exception):
+    """Exception raised when an authentication service error occurs"""
+
+class UserError(AuthenticationServiceError):
+    """Exception raised when an user error occurs"""
+
+class PasswordError(AuthenticationServiceError):
+    """Exception raised when an password error occurs"""
 
 
 class AuthenticationService:
@@ -21,9 +27,11 @@ class AuthenticationService:
 
     def login(self, email: str, password: str) -> AuthenticationResult:
         if (user := self._user_repository.get_user_by_email(email)) is None:
-            raise UserExistsError(f"User {email} does not exist.")
+            msg = f"User {email} does not exist."
+            raise UserError(msg)
         if user.password != password:
-            raise ValueError("Invalid password")
+            msg = "Invalid password"
+            raise PasswordError(msg)
         return AuthenticationResult(
             user=user,
             token=self._jwt_generator.generate_token(user=user),
@@ -34,7 +42,7 @@ class AuthenticationService:
     ) -> AuthenticationResult:
         if self._user_repository.get_user_by_email(email) is not None:
             msg = f"User {email} allready exists."
-            raise UserExistsError(msg)
+            raise UserError(msg)
         user = self._user_repository.add(
             User(
                 id=uuid.uuid4(),
