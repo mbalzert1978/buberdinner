@@ -16,10 +16,10 @@ def register(
         request.first_name, request.last_name, request.email, request.password
     )
     return AuthenticationResponse(
-        id=auth_result.id,
-        first_name=auth_result.first_name,
-        last_name=auth_result.last_name,
-        email=auth_result.email,
+        id=auth_result.user.id,
+        first_name=auth_result.user.first_name,
+        last_name=auth_result.user.last_name,
+        email=auth_result.user.email,
         token=auth_result.token,
     )
 
@@ -30,9 +30,9 @@ def login(
 ) -> AuthenticationResponse:
     auth_result = auth_service.login(request.email, request.password)
     return AuthenticationResponse(
-        id=auth_result.id,
-        first_name=auth_result.first_name,
-        last_name=auth_result.last_name,
-        email=auth_result.email,
+        id=auth_result.user.id,
+        first_name=auth_result.user.first_name,
+        last_name=auth_result.user.last_name,
+        email=auth_result.user.email,
         token=auth_result.token,
     )

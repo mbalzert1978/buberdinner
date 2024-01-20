@@ -1,11 +1,8 @@
-import uuid
-
 import pydantic
+
+from buberdinner.domain.entities import User
 
 
 class AuthenticationResult(pydantic.BaseModel):
-    id: uuid.UUID = pydantic.Field(default_factory=uuid.uuid4)
-    first_name: str
-    last_name: str
-    email: str
+    user: User
     token: str

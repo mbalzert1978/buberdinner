@@ -29,19 +29,9 @@ class AuthenticationService:
             raise ValueError("Invalid password")
 
         # generate token
-        token = self._jwt_generator.generate_token(
-            user_id=user.id,
-            first_name=user.first_name,
-            last_name=user.last_name,
-        )
+        token = self._jwt_generator.generate_token(user=user)
 
-        return AuthenticationResult(
-            id=user.id,
-            first_name=user.first_name,
-            last_name=user.last_name,
-            email=email,
-            token=token,
-        )
+        return AuthenticationResult(user=user, token=token)
 
     def register(
         self, first_name: str, last_name: str, email: str, password: str
@@ -59,15 +49,5 @@ class AuthenticationService:
                 password=password,
             )
         )
-        token = self._jwt_generator.generate_token(
-            user_id=user.id,
-            first_name=user.first_name,
-            last_name=user.last_name,
-        )
-        return AuthenticationResult(
-            id=user.id,
-            first_name=first_name,
-            last_name=last_name,
-            email=email,
-            token=token,
-        )
+        token = self._jwt_generator.generate_token(user=user)
+        return AuthenticationResult(user=user, token=token)
