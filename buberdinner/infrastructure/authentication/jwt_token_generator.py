@@ -30,8 +30,8 @@ class JwtTokenGenerator:
                 self._settings.secret_key.get_secret_value(),
                 algorithm=self.ALGORITHM,
             )
-        except jwt.PyJWTError:
+        except jwt.PyJWTError as exc:
             detail = f"Failed to generate JWT token for user {user.id}"
-            return Err(JwtError(detail=detail))
+            return Err(JwtError(*exc.args, detail=detail))
         else:
             return Ok(token)

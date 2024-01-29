@@ -5,16 +5,10 @@ import fastapi
 
 from buberdinner.api.core.config import get_app_settings
 from buberdinner.app.common.interfaces.authentication import ITokenGenerator
-from buberdinner.app.common.interfaces.persistence.user_repository import (
-    IUserRepository,
-)
+from buberdinner.app.common.interfaces.persistence import IUserRepository
 from buberdinner.app.common.interfaces.services import IProvider
-from buberdinner.app.services.authentication import (
-    AuthenticationService,
-    IAuthentication,
-)
-from buberdinner.infrastructure.authentication import JwtTokenGenerator
-from buberdinner.infrastructure.authentication.jwt_settings import JwtSettings
+from buberdinner.app.services import authentication
+from buberdinner.infrastructure.authentication import JwtSettings, JwtTokenGenerator
 from buberdinner.infrastructure.persistence import UserRepository
 from buberdinner.infrastructure.services import DateTimeProvider
 
@@ -47,12 +41,12 @@ def get_user_repo() -> IUserRepository:
 def authentication_service(
     jwt_generator: typing.Annotated[ITokenGenerator, fastapi.Depends(get_jwt)],
     user_repository: typing.Annotated[IUserRepository, fastapi.Depends(get_user_repo)],
-) -> IAuthentication:
-    return AuthenticationService(
+) -> authentication.IAuthentication:
+    return authentication.AuthenticationService(
         jwt_generator=jwt_generator, user_repository=user_repository
     )
 
 
 Authentication = typing.Annotated[
-    IAuthentication, fastapi.Depends(authentication_service)
+    authentication.IAuthentication, fastapi.Depends(authentication_service)
 ]
