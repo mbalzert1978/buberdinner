@@ -8,10 +8,8 @@ from buberdinner.api.core.events import (
     create_start_app_handler,
     create_stop_app_handler,
 )
-from buberdinner.api.middleware.error import error_handler
+from buberdinner.api.middleware import error_handler, http422_error_handler
 from buberdinner.api.v1.controllers import Authcontroller
-
-from .middleware.validation import http422_error_handler
 
 
 def get_application() -> FastAPI:

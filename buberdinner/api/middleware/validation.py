@@ -6,8 +6,6 @@ from starlette.status import HTTP_422_UNPROCESSABLE_ENTITY
 
 from buberdinner.app.error import ApiProblem
 
-INSTANCE = "Buberdinner"
-
 
 async def http422_error_handler(
     _: Request,
