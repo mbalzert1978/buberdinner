@@ -1,4 +1,7 @@
-class AuthenticationError(Exception):
+from buberdinner.app.error import Error
+
+
+class AuthenticationError(Error):
     """Exception raised when an authentication service error occurs"""
 
 

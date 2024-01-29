@@ -1,4 +1,12 @@
+import typing
+
 from fastapi import status
+from fastapi.exceptions import RequestValidationError
+from httpproblem import Problem
+from pydantic import ValidationError
+
+INTERNAL_SERVER_ERROR = "Internal Server Error"
+VALIDATION_ERROR = "Validation Error"
 
 types: dict[int, str] = {
     status.HTTP_400_BAD_REQUEST: "https://www.rfc-editor.org/rfc/rfc2616#section-10.4.1",
@@ -37,3 +45,39 @@ types: dict[int, str] = {
 
 def get_type(status_code: int, default: str = "about : blank") -> str:
     return types.get(status_code, default)
+
+
+class Error(Exception):
+    def __init__(
+        self,
+        *args,
+        status_code: int = 500,
+        detail: str = INTERNAL_SERVER_ERROR,
+        errors: typing.Sequence[typing.Any] | None = None,
+    ) -> None:
+        self.status_code = status_code
+        self.detail = detail
+        self.type = get_type(status_code)
+        self.errors = errors or [str(self)]
+        super().__init__(*args)
+
+    def map_error(self) -> dict:
+        return Problem(
+            status=self.status_code,
+            type=self.type,
+            detail=self.detail,
+            errors=self.errors,
+        ).to_dict()
+
+    @classmethod
+    def from_validation_error(
+        self, exc: RequestValidationError | ValidationError
+    ) -> "Error":
+        return Error(
+            status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+            detail=VALIDATION_ERROR,
+            errors=exc.errors(),
+        )
+
+    def __str__(self) -> str:
+        return f"{self.status_code}: {self.detail}"

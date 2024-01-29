@@ -1,11 +1,14 @@
 import typing
 
+from result import Result
+
+from buberdinner.app.error import Error
 from buberdinner.domain.entities.user import User
 
 
 class IUserRepository(typing.Protocol):
-    def add(self, user: User) -> User:
+    def add(self, user: User) -> Result[User, Error]:
         ...
 
-    def get_user_by_email(self, email: str) -> User | None:
+    def get_user_by_email(self, email: str) -> Result[User, Error]:
         ...
