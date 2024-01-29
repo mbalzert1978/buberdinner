@@ -20,13 +20,13 @@ def register(
         request.password,
     )
     match auth_result:
-        case Ok(user):
+        case Ok(credentials):
             return AuthenticationResponse(
-                id=user.user.id,
-                first_name=user.user.first_name,
-                last_name=user.user.last_name,
-                email=user.user.email,
-                token=user.token,
+                id=credentials.user.id,
+                first_name=credentials.user.first_name,
+                last_name=credentials.user.last_name,
+                email=credentials.user.email,
+                token=credentials.token,
             )
         case Err(exc):
             raise exc
@@ -36,15 +36,18 @@ def register(
 def login(
     request: LoginRequest, auth_service: dependencies.Authentication
 ) -> AuthenticationResponse:
-    auth_result = auth_service.login(request.email, request.password)
+    auth_result = auth_service.login(
+        request.email,
+        request.password,
+    )
     match auth_result:
-        case Ok(user):
+        case Ok(credentials):
             return AuthenticationResponse(
-                id=user.user.id,
-                first_name=user.user.first_name,
-                last_name=user.user.last_name,
-                email=user.user.email,
-                token=user.token,
+                id=credentials.user.id,
+                first_name=credentials.user.first_name,
+                last_name=credentials.user.last_name,
+                email=credentials.user.email,
+                token=credentials.token,
             )
         case Err(exc):
             raise exc
