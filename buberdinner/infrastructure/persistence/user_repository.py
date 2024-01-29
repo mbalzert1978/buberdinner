@@ -1,5 +1,3 @@
-import typing
-
 from buberdinner.domain.entities import User
 
 

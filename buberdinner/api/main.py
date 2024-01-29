@@ -1,5 +1,6 @@
 """Buber Dinner api."""
 from fastapi import FastAPI
+from fastapi.exceptions import HTTPException, RequestValidationError
 from starlette.middleware.cors import CORSMiddleware
 
 from buberdinner.api.core.config import get_app_settings
@@ -7,7 +8,10 @@ from buberdinner.api.core.events import (
     create_start_app_handler,
     create_stop_app_handler,
 )
+from buberdinner.api.middleware.error import error_handler
 from buberdinner.api.v1.controllers import Authcontroller
+
+from .middleware.validation import http422_error_handler
 
 
 def get_application() -> FastAPI:
@@ -34,8 +38,8 @@ def get_application() -> FastAPI:
         create_stop_app_handler(application),
     )
 
-    # application.add_exception_handler(HTTPException, http_error_handler)
-    # application.add_exception_handler(RequestValidationError, http422_error_handler)
+    application.add_exception_handler(HTTPException, error_handler)
+    application.add_exception_handler(RequestValidationError, http422_error_handler)
     application.include_router(Authcontroller, prefix=settings.api_prefix)
 
     return application
