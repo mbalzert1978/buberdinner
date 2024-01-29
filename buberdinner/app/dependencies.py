@@ -23,9 +23,6 @@ def get_dt_provider() -> IProvider:
     return DateTimeProvider()
 
 
-Provider = typing.Annotated[IProvider, fastapi.Depends(get_dt_provider)]
-
-
 @functools.lru_cache
 def get_jwt_settings() -> JwtSettings:
     settings = get_app_settings()
@@ -36,25 +33,20 @@ def get_jwt_settings() -> JwtSettings:
     )
 
 
-TokenSettings = typing.Annotated[JwtSettings, fastapi.Depends(get_jwt_settings)]
-
-
-def get_jwt(provider: Provider, token_settings: TokenSettings) -> ITokenGenerator:
+def get_jwt(
+    provider: typing.Annotated[IProvider, fastapi.Depends(get_dt_provider)],
+    token_settings: typing.Annotated[JwtSettings, fastapi.Depends(get_jwt_settings)],
+) -> ITokenGenerator:
     return JwtTokenGenerator(provider, token_settings)
-
-
-TokenGenerator = typing.Annotated[ITokenGenerator, fastapi.Depends(get_jwt)]
 
 
 def get_user_repo() -> IUserRepository:
     return UserRepository()
 
 
-UserRepo = typing.Annotated[IUserRepository, fastapi.Depends(get_user_repo)]
-
-
 def authentication_service(
-    jwt_generator: TokenGenerator, user_repository: UserRepo
+    jwt_generator: typing.Annotated[ITokenGenerator, fastapi.Depends(get_jwt)],
+    user_repository: typing.Annotated[IUserRepository, fastapi.Depends(get_user_repo)],
 ) -> IAuthentication:
     return AuthenticationService(
         jwt_generator=jwt_generator, user_repository=user_repository

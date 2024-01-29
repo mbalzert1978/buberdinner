@@ -80,4 +80,5 @@ class Error(Exception):
         )
 
     def __str__(self) -> str:
-        return f"{self.status_code}: {self.detail}"
+        cls = type(self)
+        return f"{cls.__name__}.{self.detail.replace(' ', '.')}"
