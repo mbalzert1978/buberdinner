@@ -5,9 +5,14 @@ from result import Err, Ok, Result
 from buberdinner.app.common.interfaces.authentication import ITokenGenerator
 from buberdinner.app.common.interfaces.persistence import IUserRepository
 from buberdinner.app.error import Error
-from buberdinner.app.error.authentication import PasswordError, UserError
+from buberdinner.app.error import authentication as auth
 from buberdinner.app.services.authentication import AuthenticationResult
 from buberdinner.domain.entities import User
+
+UNREACHABLE = "Unreachable error."
+INVALID_PW = "Invalid password."
+INVALID_EMAIL = "Email allready registered."
+WRITE_ERROR = "Error writing user {user}."
 
 
 class AuthenticationService:
@@ -18,43 +23,47 @@ class AuthenticationService:
         self._user_repository = user_repository
 
     def login(self, email: str, password: str) -> Result[AuthenticationResult, Error]:
-        user_by_email = self._user_repository.get_user_by_email(email)
-        match user_by_email:
+        match user_result := self._user_repository.get_user_by_email(email):
             case Ok(user):
                 if user.password != password:
-                    detail = "Invalid password"
-                    return Err(PasswordError(status_code=401, detail=detail))
+                    return Err(auth.PasswordError(status_code=401, detail=INVALID_PW))
             case Err(_):
-                return user_by_email
+                return user_result
+            case _:
+                return Err(auth.AuthenticationError(detail=UNREACHABLE))
 
-        token_result = self._jwt_generator.generate_token(user=user)
-        match token_result:
+        match token_result := self._jwt_generator.generate_token(user=user):
             case Ok(token):
                 return Ok(AuthenticationResult(user=user, token=token))
             case Err(_):
                 return token_result
+            case _:
+                return Err(auth.AuthenticationError(detail=UNREACHABLE))
 
     def register(
         self, first_name: str, last_name: str, email: str, password: str
     ) -> Result[AuthenticationResult, Error]:
         if self._user_repository.get_user_by_email(email).is_ok():
-            return Err(UserError(status_code=409, detail="Email allready registered."))
-        user_to_db = User(
-            id=uuid.uuid4(),
-            first_name=first_name,
-            last_name=last_name,
-            email=email,
-            password=password,
-        )
-        user_result = self._user_repository.add(user_to_db)
-        match user_result:
+            return Err(auth.UserError(status_code=409, detail=INVALID_EMAIL))
+
+        match self._user_repository.add(
+            user_to_db := User(
+                id=uuid.uuid4(),
+                first_name=first_name,
+                last_name=last_name,
+                email=email,
+                password=password,
+            )
+        ):
             case Ok(user):
-                token_result = self._jwt_generator.generate_token(user=user)
-                match token_result:
+                match token_result := self._jwt_generator.generate_token(user=user):
                     case Ok(token):
                         return Ok(AuthenticationResult(user=user, token=token))
                     case Err(_):
                         return token_result
+                    case _:
+                        return Err(auth.AuthenticationError(detail=UNREACHABLE))
             case Err(_):
-                detail = f"Error inserting user{user_to_db}."
-                return Err(UserError(detail=detail))
+                return Err(auth.UserError(detail=WRITE_ERROR.format(user=user_to_db)))
+            case _:
+                return Err(auth.AuthenticationError(detail=UNREACHABLE))
