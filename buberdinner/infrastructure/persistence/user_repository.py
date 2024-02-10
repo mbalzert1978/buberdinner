@@ -1,7 +1,7 @@
 from result import Err, Ok, Result
 
 from buberdinner.app.error import Error
-from buberdinner.domain.entities import User
+from buberdinner.domain.user import User
 from buberdinner.infrastructure.error import NotFoundError, WriteError
 
 NOT_FOUND = "Email does not exist."

@@ -3,7 +3,7 @@ import typing
 from result import Result
 
 from buberdinner.app.error import Error
-from buberdinner.domain.entities.user import User
+from buberdinner.domain.user.user import User
 
 
 class IUserRepository(typing.Protocol):

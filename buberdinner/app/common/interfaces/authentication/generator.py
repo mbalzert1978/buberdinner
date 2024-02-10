@@ -3,7 +3,7 @@ import typing
 from result import Result
 
 from buberdinner.app.error import Error
-from buberdinner.domain.entities import User
+from buberdinner.domain.user import User
 
 
 class ITokenGenerator(typing.Protocol):

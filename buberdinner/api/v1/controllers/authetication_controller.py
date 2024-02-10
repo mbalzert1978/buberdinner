@@ -22,7 +22,7 @@ def register(
     match auth_result:
         case Ok(credentials):
             return AuthenticationResponse(
-                id=credentials.user.id,
+                id=credentials.user.id.value,
                 first_name=credentials.user.first_name,
                 last_name=credentials.user.last_name,
                 email=credentials.user.email,
@@ -43,7 +43,7 @@ def login(
     match auth_result:
         case Ok(credentials):
             return AuthenticationResponse(
-                id=credentials.user.id,
+                id=credentials.user.id.value,
                 first_name=credentials.user.first_name,
                 last_name=credentials.user.last_name,
                 email=credentials.user.email,

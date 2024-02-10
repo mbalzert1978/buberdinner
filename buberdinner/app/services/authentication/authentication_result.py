@@ -1,6 +1,6 @@
 import pydantic
 
-from buberdinner.domain.entities import User
+from buberdinner.domain.user import User
 
 
 class AuthenticationResult(pydantic.BaseModel):

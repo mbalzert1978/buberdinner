@@ -1,5 +1,3 @@
-import uuid
-
 from result import Err, Ok, Result
 
 from buberdinner.app.common.interfaces.authentication import ITokenGenerator
@@ -7,7 +5,7 @@ from buberdinner.app.common.interfaces.persistence import IUserRepository
 from buberdinner.app.error import Error, common
 from buberdinner.app.error import authentication as auth
 from buberdinner.app.services.authentication import AuthenticationResult
-from buberdinner.domain.entities import User
+from buberdinner.domain.user import User, UserId
 
 INVALID_PASSWORD = "Invalid password."
 INVALID_EMAIL = "Email allready registered."
@@ -39,7 +37,7 @@ class AuthenticationService:
             return Err(auth.UserError(status_code=409, detail=INVALID_EMAIL))
 
         user_to_db = User(
-            id=uuid.uuid4(),
+            id=UserId.create(),
             first_name=first_name,
             last_name=last_name,
             email=email,
