@@ -1,7 +1,7 @@
 from starlette.requests import Request
 from starlette.responses import JSONResponse
 
-from buberdinner.app.error.error import Error
+from buberdinner.app.error.common.error import Error
 
 INSTANCE = "Buberdinner"
 

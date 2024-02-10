@@ -1,3 +1,3 @@
-from buberdinner.app.error.common.service_error import ServiceError, UnreachableError
+from buberdinner.app.error.common.error import Error
 
-__all__ = ["ServiceError", "UnreachableError"]
+__all__ = ["Error"]
