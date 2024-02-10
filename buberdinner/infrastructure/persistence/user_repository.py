@@ -2,20 +2,26 @@ from result import Err, Ok, Result
 
 from buberdinner.app.error import Error
 from buberdinner.domain.entities import User
-from buberdinner.infrastructure.error import NotFoundError
+from buberdinner.infrastructure.error import NotFoundError, WriteError
+
+NOT_FOUND = "Email does not exist."
+STATUS_CODE = 404
 
 
 class UserRepository:
     _users: list[User] = []
 
     def add(self, user: User) -> Result[User, Error]:
-        self._users.append(user)
-        return Ok(user)
+        try:
+            self._users.append(user)
+        except Exception as exc:
+            return Err(WriteError(detail=str(exc)))
+        else:
+            return Ok(user)
 
     def get_user_by_email(self, email: str) -> Result[User, Error]:
         for user in self._users:
-            if user.email != email:
+            if email != user.email:
                 continue
             return Ok(user)
-        detail = "Email does not exist."
-        return Err(NotFoundError(status_code=404, detail=detail))
+        return Err(NotFoundError(status_code=STATUS_CODE, detail=NOT_FOUND))
