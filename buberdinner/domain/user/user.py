@@ -1,10 +1,11 @@
 import dataclasses
-import uuid
+
+from buberdinner.domain.user.user_id import UserId
 
 
 @dataclasses.dataclass
 class User:
-    id: uuid.UUID
+    id: UserId
     first_name: str
     last_name: str
     email: str
