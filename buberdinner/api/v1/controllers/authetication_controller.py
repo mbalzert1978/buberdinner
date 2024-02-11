@@ -17,7 +17,7 @@ def register(
         request.first_name,
         request.last_name,
         request.email,
-        request.password,
+        request.password.get_secret_value(),
     )
     match auth_result:
         case Ok(credentials):
@@ -38,7 +38,7 @@ def login(
 ) -> AuthenticationResponse:
     auth_result = auth_service.login(
         request.email,
-        request.password,
+        request.password.get_secret_value(),
     )
     match auth_result:
         case Ok(credentials):
