@@ -1,8 +1,8 @@
 import jwt
-from result import Err, Ok, Result
 
 from buberdinner.app.common.interfaces.services import IProvider
 from buberdinner.app.error import Error
+from buberdinner.app.result import Err, Ok, Result
 from buberdinner.domain.user import User
 from buberdinner.infrastructure.authentication import JwtSettings
 from buberdinner.infrastructure.error import JwtError

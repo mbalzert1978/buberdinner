@@ -1,7 +1,7 @@
 import fastapi
-from result import Err, Ok
 
 from buberdinner.app import dependencies
+from buberdinner.app.result import Err, Ok
 from buberdinner.schemas.authentication.login import LoginRequest
 from buberdinner.schemas.authentication.register import RegisterRequest
 from buberdinner.schemas.authentication.response import AuthenticationResponse

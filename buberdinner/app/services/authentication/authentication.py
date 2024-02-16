@@ -1,8 +1,7 @@
 import typing
 
-from result import Result
-
 from buberdinner.app.error import Error
+from buberdinner.app.result import Result
 from buberdinner.app.services.authentication.authentication_result import (
     AuthenticationResult,
 )
