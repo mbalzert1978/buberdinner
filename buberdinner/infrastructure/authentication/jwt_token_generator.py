@@ -8,11 +8,10 @@ from buberdinner.infrastructure.authentication import JwtSettings
 from buberdinner.infrastructure.authentication.error import JwtError
 
 FAILED = "Failed to generate JWT token for user %s."
+ALGORITHM = "HS256"
 
 
 class JwtTokenGenerator:
-    ALGORITHM = "HS256"
-
     def __init__(self, datetime_provider: IProvider, settings: JwtSettings) -> None:
         self._settings = settings
         self._datetime_provider = datetime_provider
@@ -38,7 +37,7 @@ class JwtTokenGenerator:
             token = jwt.encode(
                 payload,
                 self._settings.secret_key.get_secret_value(),
-                algorithm=self.ALGORITHM,
+                algorithm=ALGORITHM,
             )
         except jwt.PyJWTError as exc:
             return Err(JwtError(*exc.args, detail=FAILED % user.id))
