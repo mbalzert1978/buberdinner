@@ -4,10 +4,10 @@ import typing
 import fastapi
 
 from buberdinner.api.core.config import get_app_settings
-from buberdinner.app.common.interfaces.authentication import ITokenGenerator
-from buberdinner.app.common.interfaces.persistence import IUserRepository
-from buberdinner.app.common.interfaces.services import IProvider
 from buberdinner.app.services import authentication
+from buberdinner.domain.interfaces.authentication import ITokenGenerator
+from buberdinner.domain.interfaces.persistence import IUserRepository
+from buberdinner.domain.interfaces.services import IProvider
 from buberdinner.infrastructure.authentication import JwtSettings, JwtTokenGenerator
 from buberdinner.infrastructure.persistence import UserRepository
 from buberdinner.infrastructure.services import DateTimeProvider

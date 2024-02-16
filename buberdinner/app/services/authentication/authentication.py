@@ -1,10 +1,8 @@
 import typing
 
-from buberdinner.app.error import Error
-from buberdinner.app.result import Result
-from buberdinner.app.services.authentication.authentication_result import (
-    AuthenticationResult,
-)
+from buberdinner.app.services.authentication.authentication_result import AuthenticationResult
+from buberdinner.app.shared.error import Error
+from buberdinner.app.shared.result import Result
 
 
 class IAuthentication(typing.Protocol):

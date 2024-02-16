@@ -1,4 +1,4 @@
-from buberdinner.app.error import Error
+from buberdinner.app.shared.error.error import Error
 
 
 class InfrastructureError(Error):
@@ -11,7 +11,3 @@ class WriteError(InfrastructureError):
 
 class NotFoundError(InfrastructureError):
     """Raised when entity was not found in database."""
-
-
-class JwtError(Error):
-    """Base exception for all JWT related exceptions."""

@@ -1,4 +1,4 @@
-from buberdinner.app.error import Error
+from buberdinner.app.shared.error import Error
 
 
 class AuthenticationError(Error):

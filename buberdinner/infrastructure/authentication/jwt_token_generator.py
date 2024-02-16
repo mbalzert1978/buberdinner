@@ -1,11 +1,13 @@
 import jwt
 
-from buberdinner.app.common.interfaces.services import IProvider
-from buberdinner.app.error import Error
-from buberdinner.app.result import Err, Ok, Result
+from buberdinner.app.shared.error import Error, service
+from buberdinner.app.shared.result import Err, Ok, Result
+from buberdinner.domain.interfaces.services import IProvider
 from buberdinner.domain.user import User
 from buberdinner.infrastructure.authentication import JwtSettings
-from buberdinner.infrastructure.error import JwtError
+from buberdinner.infrastructure.authentication.error import JwtError
+
+FAILED = "Failed to generate JWT token for user %s."
 
 
 class JwtTokenGenerator:
@@ -16,22 +18,27 @@ class JwtTokenGenerator:
         self._datetime_provider = datetime_provider
 
     def generate_token(self, user: User) -> Result[str, Error]:
-        try:
-            token = jwt.encode(
-                {
-                    "issuer": self._settings.issuer,
-                    "user_id": str(user.id),
-                    "first_name": user.first_name,
-                    "last_name": user.last_name,
-                    "exp": self._datetime_provider.add_days(
-                        self._settings.expire_in_days
-                    ),
-                },
-                self._settings.secret_key.get_secret_value(),
-                algorithm=self.ALGORITHM,
-            )
-        except jwt.PyJWTError as exc:
-            detail = f"Failed to generate JWT token for user {user.id}"
-            return Err(JwtError(*exc.args, detail=detail))
-        else:
-            return Ok(token)
+        match provider_result := self._datetime_provider.add_days(
+            self._settings.expire_in_days
+        ):
+            case Ok(expire):
+                try:
+                    token = jwt.encode(
+                        {
+                            "issuer": self._settings.issuer,
+                            "user_id": str(user.id),
+                            "first_name": user.first_name,
+                            "last_name": user.last_name,
+                            "exp": expire,
+                        },
+                        self._settings.secret_key.get_secret_value(),
+                        algorithm=self.ALGORITHM,
+                    )
+                except jwt.PyJWTError as exc:
+                    return Err(JwtError(*exc.args, detail=FAILED % user.id))
+                else:
+                    return Ok(token)
+            case Err(_):
+                return provider_result
+            case _:
+                return Err(service.UnreachableError())

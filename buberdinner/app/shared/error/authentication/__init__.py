@@ -1,4 +1,4 @@
-from buberdinner.app.error.authentication.auth_service import (
+from buberdinner.app.shared.error.authentication.auth_service import (
     AuthenticationError,
     PasswordError,
     UserError,

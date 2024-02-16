@@ -10,7 +10,7 @@ from buberdinner.api.core.events import (
 )
 from buberdinner.api.middleware import error_handler, http422_error_handler
 from buberdinner.api.v1.controllers import Authcontroller
-from buberdinner.app.error import Error
+from buberdinner.app.shared.error import Error
 
 
 def get_application() -> FastAPI:

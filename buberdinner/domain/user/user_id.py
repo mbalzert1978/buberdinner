@@ -2,6 +2,9 @@ import dataclasses
 import typing
 import uuid
 
+from buberdinner.app.shared.error.error import Error
+from buberdinner.app.shared.result import Ok, Result
+
 DETAIL = "Comparisation between %s and %s is not implemented."
 UUID_FN = uuid.uuid4
 
@@ -11,8 +14,8 @@ class UserId:
     value: uuid.UUID
 
     @classmethod
-    def create(cls) -> typing.Self:
-        return cls(UUID_FN())
+    def create(cls) -> Result[typing.Self, Error]:
+        return Ok(cls(UUID_FN()))
 
     def __eq__(self, __value: object) -> bool:
         cls = type(self)

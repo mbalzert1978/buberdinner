@@ -1,7 +1,7 @@
-from buberdinner.app.error import Error
-from buberdinner.app.result import Err, Ok, Result
+from buberdinner.app.shared.error import Error
+from buberdinner.app.shared.result import Err, Ok, Result
 from buberdinner.domain.user import User
-from buberdinner.infrastructure.error import NotFoundError, WriteError
+from buberdinner.infrastructure.persistence.error import NotFoundError, WriteError
 
 NOT_FOUND = "Email does not exist."
 STATUS_CODE = 404
@@ -14,7 +14,7 @@ class UserRepository:
         try:
             self._users.append(user)
         except Exception as exc:
-            return Err(WriteError(detail=str(exc)))
+            return Err(WriteError(*exc.args, detail=str(exc)))
         else:
             return Ok(user)
 
