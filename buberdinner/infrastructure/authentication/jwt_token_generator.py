@@ -22,23 +22,25 @@ class JwtTokenGenerator:
             self._settings.expire_in_days
         ):
             case Ok(expire):
-                try:
-                    token = jwt.encode(
-                        {
-                            "issuer": self._settings.issuer,
-                            "user_id": str(user.id),
-                            "first_name": user.first_name,
-                            "last_name": user.last_name,
-                            "exp": expire,
-                        },
-                        self._settings.secret_key.get_secret_value(),
-                        algorithm=self.ALGORITHM,
-                    )
-                except jwt.PyJWTError as exc:
-                    return Err(JwtError(*exc.args, detail=FAILED % user.id))
-                else:
-                    return Ok(token)
+                payload = {
+                    "issuer": self._settings.issuer,
+                    "user_id": str(user.id),
+                    "first_name": user.first_name,
+                    "last_name": user.last_name,
+                    "exp": expire,
+                }
             case Err(_):
                 return provider_result
             case _:
                 return Err(service.UnreachableError())
+
+        try:
+            token = jwt.encode(
+                payload,
+                self._settings.secret_key.get_secret_value(),
+                algorithm=self.ALGORITHM,
+            )
+        except jwt.PyJWTError as exc:
+            return Err(JwtError(*exc.args, detail=FAILED % user.id))
+        else:
+            return Ok(token)
