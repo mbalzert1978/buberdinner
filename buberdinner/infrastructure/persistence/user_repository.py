@@ -1,6 +1,5 @@
-from result import Err, Ok, Result
-
 from buberdinner.app.error import Error
+from buberdinner.app.result import Err, Ok, Result
 from buberdinner.domain.user import User
 from buberdinner.infrastructure.error import NotFoundError, WriteError
 

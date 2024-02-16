@@ -1,8 +1,7 @@
-from result import Err, Ok, Result
-
 from buberdinner.app.common.interfaces.authentication import ITokenGenerator
 from buberdinner.app.common.interfaces.persistence import IUserRepository
 from buberdinner.app.error import Error, authentication, service
+from buberdinner.app.result import Err, Ok, Result
 from buberdinner.app.services.authentication import AuthenticationResult
 from buberdinner.domain.user import User, UserId
 
